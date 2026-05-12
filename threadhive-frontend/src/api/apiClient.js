@@ -1,38 +1,62 @@
-const API_BASE_URL = "http://localhost:5000/api";
+import axios from 'axios';
+import store from '../store';
+import { logout } from '../store/authSlice';
+
+const API_BASE_URL = 'http://localhost:5000/api';
 // const API_BASE_URL = "https://w04-mls.onrender.com/api";
 
-// Utility function to make fetch requests
-export const fetchAPI = async (endpoint, options = {}) => {
-  const url = `${API_BASE_URL}${endpoint}`;
-  const token = localStorage.getItem("token");
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-  const headers = {
-    "Content-Type": "application/json",
-    ...options.headers,
-  };
+apiClient.interceptors.request.use((config) => {
+  const token = store.getState().auth.token;
 
   if (token) {
-    headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
   }
+
+  return config;
+});
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      store.dispatch(logout());
+    }
+
+    return Promise.reject(error);
+  },
+);
+
+export const fetchAPI = async (endpoint, options = {}) => {
+  const { method = 'GET', body, headers, ...rest } = options;
 
   const config = {
-    ...options,
+    url: endpoint,
+    method,
     headers,
+    ...rest,
   };
 
-  const response = await fetch(url, config);
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    const error = new Error(errorData.message || "API Error");
-    error.response = {
-      status: response.status,
-      data: errorData,
-    };
-    throw error;
+  if (body !== undefined) {
+    if (typeof body === 'string') {
+      try {
+        config.data = JSON.parse(body);
+      } catch {
+        config.data = body;
+      }
+    } else {
+      config.data = body;
+    }
   }
 
-  return response.json();
+  const response = await apiClient.request(config);
+  return response.data;
 };
 
-export default fetchAPI;
+export default apiClient;

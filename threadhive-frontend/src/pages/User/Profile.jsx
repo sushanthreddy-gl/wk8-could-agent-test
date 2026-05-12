@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Row, Col, Form } from "react-bootstrap";
-import { useAuth } from "../../context/AuthContext";
-import "./Profile.css";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Row, Col, Form } from 'react-bootstrap';
+import { useAuth } from '../../store/hooks';
+import './Profile.css';
 
 function Profile() {
   const navigate = useNavigate();
@@ -10,21 +10,20 @@ function Profile() {
 
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
-    bio: user?.bio || "",
-    location: user?.location || "",
-    website: user?.website || "",
+    name: user?.name || '',
+    email: user?.email || '',
+    bio: user?.bio || '',
+    location: user?.location || '',
+    website: user?.website || '',
   });
 
-  // Sync form when user changes in context (e.g. after save)
   useEffect(() => {
     setForm({
-      name: user?.name || "",
-      email: user?.email || "",
-      bio: user?.bio || "",
-      location: user?.location || "",
-      website: user?.website || "",
+      name: user?.name || '',
+      email: user?.email || '',
+      bio: user?.bio || '',
+      location: user?.location || '',
+      website: user?.website || '',
     });
   }, [user]);
 
@@ -48,12 +47,12 @@ function Profile() {
         <div className="profile-header">
           <div className="profile-avatar-section">
             <div className="profile-avatar">
-              {form.name?.charAt(0).toUpperCase() || "U"}
+              {form.name?.charAt(0).toUpperCase() || 'U'}
             </div>
           </div>
           <div className="profile-info-section">
             <div className="profile-title-row">
-              <h2 className="profile-name">{form.name || "User"}</h2>
+              <h2 className="profile-name">{form.name || 'User'}</h2>
               <div>
                 {editing ? (
                   <>

@@ -1,12 +1,12 @@
-import { Container, Card, Form, Button, Spinner } from "react-bootstrap";
-import { useState, useRef, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { login } from "../../services/authService";
-import { useAuth } from "../../context/AuthContext";
-import "./Auth.css";
+import { Container, Card, Form, Button, Spinner } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { login } from '../../services/authService';
+import { useAuth } from '../../store/hooks';
+import './Auth.css';
 
 function Login() {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [info, setInfo] = useState(null);
@@ -15,9 +15,8 @@ function Login() {
   const { loginUser } = useAuth();
 
   useEffect(() => {
-    // Check if user was redirected due to expired token
     if (location.state?.expired) {
-      setInfo("Your session has expired. Please log in again.");
+      setInfo('Your session has expired. Please log in again.');
     }
   }, [location]);
 
@@ -35,15 +34,14 @@ function Login() {
 
       loginUser(data);
 
-      // Navigate to home
-      alert("Login successful!");
-      navigate("/");
+      alert('Login successful!');
+      navigate('/');
     } catch (err) {
       const errorMessage =
-        err.response?.data?.error ||
-        err.response?.data?.message ||
-        err.message ||
-        "Login failed. Please try again.";
+        err.response?.data?.error
+        || err.response?.data?.message
+        || err.message
+        || 'Login failed. Please try again.';
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -104,7 +102,8 @@ function Login() {
               <Spinner as="span" animation="border" size="sm" role="status" />
             ) : (
               <>
-                <i className="bi bi-box-arrow-in-right me-2"></i>Login
+                <i className="bi bi-box-arrow-in-right me-2" />
+                Login
               </>
             )}
           </Button>
