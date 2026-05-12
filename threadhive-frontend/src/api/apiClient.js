@@ -1,4 +1,6 @@
 import axios from 'axios';
+import store from '../store';
+import { logout } from '../store/authSlice';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 // const API_BASE_URL = "https://w04-mls.onrender.com/api";
@@ -24,12 +26,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
-      }
+      store.dispatch(logout());
     }
 
     return Promise.reject(error);

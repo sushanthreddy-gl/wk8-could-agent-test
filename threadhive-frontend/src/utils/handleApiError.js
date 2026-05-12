@@ -1,15 +1,10 @@
-// Simple utility to handle API errors, especially 401 (unauthorized)
+import store from '../store';
+import { logout } from '../store/authSlice';
+
 export const handleApiError = (error) => {
-  // Check if it's a 401 error (token expired or invalid)
-  if (error.response && error.response.status === 401) {
-    // Clear auth data
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    
-    // Redirect to login
-    window.location.href = '/login';
+  if (error.response?.status === 401) {
+    store.dispatch(logout());
   }
-  
-  // Return the error message for other errors
+
   return error.response?.data?.message || error.message || 'An error occurred';
 };
