@@ -1,8 +1,7 @@
-import { Navbar, Container, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { useTheme } from "../../context/ThemeContext";
-import "./Header.css";
+import { Navbar, Container, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { useAuth, useTheme } from '../../store/hooks';
+import './Header.css';
 
 function Header() {
   const navigate = useNavigate();
@@ -10,20 +9,20 @@ function Header() {
   const { darkMode, toggleDarkMode } = useTheme();
 
   const handleLogin = () => {
-    navigate("/login");
+    navigate('/login');
   };
 
   const handleSignup = () => {
-    navigate("/register");
+    navigate('/register');
   };
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate('/login');
   };
 
   const handleProfileClick = () => {
-    navigate("/profile");
+    navigate('/profile');
   };
 
   return (
@@ -39,7 +38,7 @@ function Header() {
             className="dark-mode-toggle"
             onClick={toggleDarkMode}
             aria-label="Toggle dark mode"
-            title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {darkMode ? '☀️' : '🌙'}
           </button>
